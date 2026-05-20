@@ -1,0 +1,192 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Admin Dashboard</title>
+
+    <!-- ✅ Load Chart.js locally -->
+    <script src="{% static 'js/chart.js' %}"></script>
+
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #f4f6f8;
+        }
+
+        .container {
+            width: 80%;
+            margin: 40px auto;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        input {
+            padding: 8px;
+            width: 250px;
+        }
+
+        button {
+            padding: 8px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        .positive {
+            color: green;
+            font-weight: bold;
+        }
+
+        .negative {
+            color: red;
+            font-weight: bold;
+        }
+
+        .neutral {
+            color: orange;
+            font-weight: bold;
+        }
+
+        .analytics {
+            background: white;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+
+        .chart-box {
+            background: white;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Admin Dashboard</h2>
+
+    <!-- ✅ SEARCH -->
+    <div class="search-box">
+        <form method="GET">
+            <input type="text" name="q" placeholder="Search suggestion">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <!-- ✅ TABLE -->
+    <table>
+        <tr>
+            <th>Department</th>
+            <th>Suggestion</th>
+            <th>Sentiment</th>
+        </tr>
+
+        {% if data %}
+            {% for item in data %}
+            <tr>
+                <td>{{ item.department }}</td>
+                <td>{{ item.suggestion }}</td>
+                <td>
+                    {% if item.sentiment == "Positive" %}
+                        <span class="positive">{{ item.sentiment }}</span>
+                    {% elif item.sentiment == "Negative" %}
+                        <span class="negative">{{ item.sentiment }}</span>
+                    {% else %}
+                        <span class="neutral">{{ item.sentiment }}</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        {% else %}
+        <tr>
+            <td colspan="3" style="text-align:center;">No results found</td>
+        </tr>
+        {% endif %}
+    </table>
+
+    <!-- ✅ ANALYTICS -->
+    <div class="analytics">
+        <h3>Department Analytics</h3>
+        <ul>
+            {% for item in stats %}
+                <li>{{ item.department }}: {{ item.count }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- ✅ CHART -->
+    <div class="chart-box">
+        <h3>Department Chart</h3>
+        <canvas id="myChart"></canvas>
+    </div>
+
+</div>
+
+<!-- ✅ SCRIPT -->
+<script>
+    const labels = [
+        {% for item in stats %}
+            "{{ item.department }}"{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ];
+
+    const dataValues = [
+        {% for item in stats %}
+            {{ item.count }}{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ];
+
+    const ctx = document.getElementById('myChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Suggestions Count',
+                data: dataValues,
+                backgroundColor: ['#007BFF', '#28a745', '#ffc107']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: true
+                }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
