@@ -112,6 +112,22 @@ Production deployment using Nginx & Gunicorn
 Monitoring using Prometheus and Grafana
 Debugging real-world DevOps issues
 
+## 📸 Screenshots
+
+### 🌐 Application
+![App](screenshots/app.png)
+
+### 📊 Grafana Dashboard
+![Grafana](screenshots/grafana.png)
+
+### 📈 Prometheus
+![Prometheus](screenshots/prometheus.png)
+
+### ⚙️ Terraform
+![Terraform](screenshots/terraform.png)
+
+### 🤖 Ansible
+![Ansible](screenshots/ansible.png)
 
 💼 Use Case
 This project demonstrates a complete DevOps lifecycle from development to deployment and monitoring.
