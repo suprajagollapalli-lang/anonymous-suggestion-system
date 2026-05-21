@@ -1,0 +1,23 @@
+- hosts: ec2-instance
+  become: yes
+
+  tasks:
+
+    - name: Install python & nginx
+      dnf:
+        name:
+          - python3
+          - nginx
+        state: present
+
+    - name: Install pip packages
+      pip:
+        name:
+          - django
+          - gunicorn
+
+    - name: Start nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
