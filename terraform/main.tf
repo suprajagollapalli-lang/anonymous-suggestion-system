@@ -2,7 +2,7 @@ provider "aws" {
   region = "ap-south-2"
 }
 
-# ✅ Get latest Amazon Linux AMI automatically
+
 data "aws_ami" "amazon_linux" {
   most_recent = true
 
@@ -14,7 +14,7 @@ data "aws_ami" "amazon_linux" {
   }
 }
 
-# ✅ Security Group
+
 resource "aws_security_group" "django_sg" {
   name        = "django-sg"
   description = "Allow SSH, HTTP, Django"
@@ -48,7 +48,7 @@ resource "aws_security_group" "django_sg" {
   }
 }
 
-# ✅ EC2 Instance
+
 resource "aws_instance" "django_server" {
   ami           = data.aws_ami.amazon_linux.id   # ✅ AUTO AMI
   instance_type = "t3.micro"
@@ -62,7 +62,7 @@ resource "aws_instance" "django_server" {
   }
 }
 
-# ✅ Output Public IP
+
 output "public_ip" {
   value = aws_instance.django_server.public_ip
 }
